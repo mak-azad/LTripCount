@@ -1,0 +1,23 @@
+digraph "CFG for 'main' function" {
+	label="CFG for 'main' function";
+
+	Node0x56089ab38ec0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#88abfd70",label="{%2:\l  %3 = alloca i32, align 4\l  %4 = alloca i32, align 4\l  %5 = alloca i8**, align 8\l  %6 = alloca i32, align 4\l  %7 = alloca i32, align 4\l  %8 = alloca i32, align 4\l  %9 = alloca i32, align 4\l  %10 = alloca i32, align 4\l  %11 = alloca i32, align 4\l  store i32 0, i32* %3, align 4\l  store i32 %0, i32* %4, align 4\l  store i8** %1, i8*** %5, align 8\l  store i32 0, i32* %10, align 4\l  store i32 1, i32* %6, align 4\l  br label %12\l}"];
+	Node0x56089ab38ec0 -> Node0x56089ab396a0;
+	Node0x56089ab396a0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f3c7b170",label="{%12:\l12:                                               \l  %13 = load i32, i32* %6, align 4\l  %14 = icmp sle i32 %13, 2\l  br i1 %14, label %15, label %33\l|{<s0>T|<s1>F}}"];
+	Node0x56089ab396a0:s0 -> Node0x56089ab39ba0;
+	Node0x56089ab396a0:s1 -> Node0x56089ab39bf0;
+	Node0x56089ab39ba0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f3c7b170",label="{%15:\l15:                                               \l  store i32 1, i32* %7, align 4\l  br label %16\l}"];
+	Node0x56089ab39ba0 -> Node0x56089ab39dc0;
+	Node0x56089ab39dc0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%16:\l16:                                               \l  %17 = load i32, i32* %7, align 4\l  %18 = icmp sle i32 %17, 4\l  br i1 %18, label %19, label %26\l|{<s0>T|<s1>F}}"];
+	Node0x56089ab39dc0:s0 -> Node0x56089ab39f20;
+	Node0x56089ab39dc0:s1 -> Node0x56089ab39f70;
+	Node0x56089ab39f20 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%19:\l19:                                               \l  %20 = load i32, i32* %7, align 4\l  %21 = load i32, i32* %10, align 4\l  %22 = add nsw i32 %21, %20\l  store i32 %22, i32* %10, align 4\l  br label %23\l}"];
+	Node0x56089ab39f20 -> Node0x56089ab3a2b0;
+	Node0x56089ab3a2b0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{%23:\l23:                                               \l  %24 = load i32, i32* %7, align 4\l  %25 = add nsw i32 %24, 1\l  store i32 %25, i32* %7, align 4\l  br label %16, !llvm.loop !4\l}"];
+	Node0x56089ab3a2b0 -> Node0x56089ab39dc0;
+	Node0x56089ab39f70 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f3c7b170",label="{%26:\l26:                                               \l  %27 = load i32, i32* %6, align 4\l  %28 = load i32, i32* %10, align 4\l  %29 = add nsw i32 %28, %27\l  store i32 %29, i32* %10, align 4\l  br label %30\l}"];
+	Node0x56089ab39f70 -> Node0x56089ab3b240;
+	Node0x56089ab3b240 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f3c7b170",label="{%30:\l30:                                               \l  %31 = load i32, i32* %6, align 4\l  %32 = add nsw i32 %31, 1\l  store i32 %32, i32* %6, align 4\l  br label %12, !llvm.loop !6\l}"];
+	Node0x56089ab3b240 -> Node0x56089ab396a0;
+	Node0x56089ab39bf0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#88abfd70",label="{%33:\l33:                                               \l  ret i32 0\l}"];
+}
