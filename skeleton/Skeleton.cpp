@@ -42,23 +42,16 @@ namespace {
       F.getParent()->getOrInsertFunction("logop", logFuncType);
 
       LoopInfo &LI = getAnalysis<LoopInfoWrapperPass>().getLoopInfo();
-      // // count how many nested loop 
-      // int maxDepth = 0;
-      // for (Loop *L : LI) {
-      //     int depth = L->getLoopDepth();
-      //     if (depth > maxDepth){
-      //       maxDepth = depth;
-      //     }
-      // }
 
       int cnt, lcnt, rcnt=0;
       // unsigned int level =-1;
        for (auto &BB : F) {
            auto *L = LI.getLoopFor(&BB);
+           
            cnt = -1;
            if(L){
 
-             //errs() << L << "\n";
+            // errs() << LoopName << "\n";
              lcnt = 1;
                while (L->getParentLoop()) {
 
@@ -72,19 +65,18 @@ namespace {
               }
                
            }
-      //     llvm::Loop* topLoop = L;
-      //     unsigned int maxLevel = getMaxNestedLoopLevel(topLoop);
-      // //     if (maxLevel > level)
-      // //       level = maxLevel;
        }
        errs () << "Max nested depth:"<< rcnt << "\n";
 
        // // use different counters for nested loops
        std::vector<AllocaInst *> Counter(10);
-        for(int i = 0; i < rcnt; i++){
+        for(int i = 0; i < 10; i++){
             std::string t = std::to_string(i);
             t = "my_local_"+t;
             Counter[i] =  new AllocaInst(IntTy, 0, t, F.getEntryBlock().getFirstNonPHI());
+            IRBuilder<> Builder(F.getEntryBlock().getFirstNonPHI());
+            Constant *NewValue = ConstantInt::get(IntTy, 0);
+            Builder.CreateStore(NewValue, Counter[i]);
        }
 
 
@@ -101,7 +93,7 @@ namespace {
       for (auto &BB : F) {
         bool loopModified = false;
         auto *L = LI.getLoopFor(&BB);
-        
+        //lmap[L] = false;
         //lprocessed[L] = false;
 
 
@@ -141,22 +133,31 @@ namespace {
             //lprocessed[L] = true;
             SmallVector<BasicBlock*, 8> ExitBlocks;
             L->getExitBlocks(ExitBlocks);
-           // errs() << "EB Size for this loop:" << ExitBlocks.size() << "\n";
+           // errs() << "EB Size for this loop:" <<itBlocks.size() << "\n";
             if (ExitBlocks.empty())
               break;
             for (unsigned i = 0, e = ExitBlocks.size(); i != e; ++i){
               Instruction *exitInst = ExitBlocks[i]->getTerminator();
               IRBuilder<> Builder(exitInst);
               //new by me
+              //errs() << lcounter << "\n";
+                //std::string tmp1 = std::to_string(lcounter);
+               // std::string ld1 = "my_local_"+tmp1 + ".load";
+               // std::string inc1 = "my_local_" + tmp1 + ".inc";
               Value *LoadVal = Builder.CreateLoad(Builder.getInt32Ty(), Counter[lcounter], ld);
               //Builder.CreateCall(logFunc, IncVal);
               //errs() << "EB Size for this loop:" << ExitBlocks.size() << "\n";
+              //errs() << "Printing for counter:" << *(Counter[lcounter]) << "\n";
               Builder.CreateCall(logFunc,{LoadVal});
               Constant *NewValue = ConstantInt::get(IntTy, 0);
+             // for(int x = 0; x < rcnt; x++)
+              //  Builder.CreateStore(NewValue, Counter[x]);
+              //errs() << "Printing for counter:" << lcounter << "\n";
               Builder.CreateStore(NewValue, Counter[lcounter]);
             }
             lcounter++;
         }
+
         
           
           // // // reinit the counter?
