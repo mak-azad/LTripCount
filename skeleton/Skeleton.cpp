@@ -30,8 +30,9 @@ namespace {
       // }
       //AllocaInst *Counter = new AllocaInst(IntTy, 0, "my_local", F.getEntryBlock().getFirstNonPHI());
       std::map<const llvm::Loop*, bool> lmap;
+      //int lc[20]={0};
       std::map<const llvm::Loop*, int> lmap2;
-       std::map<const llvm::Loop*, bool> lprocessed;
+       std::map<std::string, bool> lprocessed;
 
       // Get the function to call from our runtime library.
       LLVMContext &Ctx = F.getContext();
@@ -89,6 +90,7 @@ namespace {
       
 
       int lcounter = 0;
+      int flag[10] = {0};
 
       for (auto &BB : F) {
         bool loopModified = false;
@@ -148,10 +150,21 @@ namespace {
               //Builder.CreateCall(logFunc, IncVal);
               //errs() << "EB Size for this loop:" << ExitBlocks.size() << "\n";
               //errs() << "Printing for counter:" << *(Counter[lcounter]) << "\n";
-              Builder.CreateCall(logFunc,{LoadVal});
+              //Value * args[] = {LoadVal,lc[lcounter]};
+              //Builder.CreateCall(logFunc,args);
+             // if (lc[lcounter] == 0)
+            // errs() << "L:" << lprocessed[ld] << "\n";
+            // if (lprocessed[ld] != true){
+              Value *NewValueL = ConstantInt::get(IntTy, lcounter);
+              Value* args[] = {LoadVal,NewValueL};
+              Builder.CreateCall(logFunc,args);
+              flag[lcounter] = 1;
+            //  lprocessed[ld] = true;
+             //}
+              //lc[lcounter] = 1;
               Constant *NewValue = ConstantInt::get(IntTy, 0);
              // for(int x = 0; x < rcnt; x++)
-              //  Builder.CreateStore(NewValue, Counter[x]);
+              //  Builder.CreateStore(NewValue, Counter[x])
               //errs() << "Printing for counter:" << lcounter << "\n";
               Builder.CreateStore(NewValue, Counter[lcounter]);
             }
