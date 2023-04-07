@@ -11,6 +11,9 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/Transforms/Utils/Cloning.h"
 #include "llvm/Analysis/LoopInfo.h"
+#include "llvm/IR/DebugLoc.h"
+#include "llvm/IR/GlobalVariable.h"
+#include "llvm/IR/Module.h"
 #include <map>
 #include <vector>
 #include <string>
@@ -33,6 +36,7 @@ namespace {
       //int lc[20]={0};
       std::map<const llvm::Loop*, int> lmap2;
        std::map<std::string, bool> lprocessed;
+      std::string functionName;
 
       // Get the function to call from our runtime library.
       LLVMContext &Ctx = F.getContext();
@@ -156,7 +160,54 @@ namespace {
             // errs() << "L:" << lprocessed[ld] << "\n";
             // if (lprocessed[ld] != true){
               Value *NewValueL = ConstantInt::get(IntTy, lcounter);
-              Value* args[] = {LoadVal,NewValueL};
+              Value *Loc;
+             // errs() << L->getStartLoc().getLine() << "\n";
+              DebugLoc debugLoc = L->getStartLoc();
+              if (debugLoc) {
+                  errs() << "Loop starts at line " << debugLoc.getLine() << "\n";
+                  
+                  unsigned int location = debugLoc.getLine() ;
+                  Loc = ConstantInt::get(IntTy, location);
+                 // errs() << location << "\n";
+                  functionName = F.getName().str();
+                  errs() << functionName << "\n";
+              }
+              //
+              // LLVMContext context;
+             // IRBuilder<> builder(context);
+              //builder.SetInsertPoint(&BB, ++builder.GetInsertPoint());
+             Value *valStr = Builder.CreateGlobalStringPtr(functionName.c_str());
+             // std::string myString = functionName;
+            errs() << "From:" << valStr << "\n";
+             
+              // IRBuilder<> builder(context);
+              // std::string myString = functionName;
+
+              // // Create a GlobalVariable that represents the string value of myString
+              // GlobalVariable* stringValue = builder.CreateGlobalStringPtr(myString);
+
+// Assign the address of the GlobalVariable to a Value* pointer
+              //Value* stringValue = stringGlobal;
+              //  Type* charType = Type::getInt8Ty(context);
+              //  Module *module = F.getParent();
+              // Constant* stringConstant = ConstantArray::get(context, functionName.c_str(), true);
+              // Create a ConstantArray that represents the string value of myString
+              //Constant* stringConstant = ConstantDataArray:&:getString(context, myString, true);
+
+              // Assign the address of the ConstantArray to a Value* pointer
+              //Value* stringValue = stringConstant;
+              // Create a global variable that references the string constant
+              // GlobalVariable* globalString = new GlobalVariable(*module, stringConstant->getType(), true, GlobalValue::PrivateLinkage, stringConstant);
+              // globalString->setName("myString");
+
+              // Use the address of the global variable as the Value* pointer
+             // Value* stringValue = globalString;
+              //Value* stringValue = new GlobalVariable(*module, stringConstant->getType(), true, GlobalValue::PrivateLinkage, stringConstant);
+              //() << "Again:" << stringValue << "\n";
+                            //
+
+              Value* args[] = {LoadVal, NewValueL, Loc, valStr};
+              //Value* args[] = {LoadVal,Loc,NewValueL,stringValue};
               Builder.CreateCall(logFunc,args);
               flag[lcounter] = 1;
             //  lprocessed[ld] = true;
