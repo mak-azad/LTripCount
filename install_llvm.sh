@@ -1,4 +1,7 @@
 #!bin/bash
+echo "Cloning LLVM 14..."
+sleep 2
+git clone -b release/14.x https://github.com/llvm/llvm-project.git
 cd llvm-project/
 mkdir build
 cd build/

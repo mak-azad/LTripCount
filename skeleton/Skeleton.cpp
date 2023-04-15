@@ -18,8 +18,9 @@
 #include <vector>
 #include <string>
 using namespace llvm;
-
+int lcounter = 0;
 namespace {
+  
   struct SkeletonPass : public FunctionPass {
     static char ID;
     SkeletonPass() : FunctionPass(ID) {}
@@ -93,7 +94,7 @@ namespace {
       Loop *PL = nullptr;
       
 
-      int lcounter = 0;
+  
       int flag[10] = {0};
 
       for (auto &BB : F) {
@@ -179,32 +180,7 @@ namespace {
              Value *valStr = Builder.CreateGlobalStringPtr(functionName.c_str());
              // std::string myString = functionName;
             errs() << "From:" << valStr << "\n";
-             
-              // IRBuilder<> builder(context);
-              // std::string myString = functionName;
 
-              // // Create a GlobalVariable that represents the string value of myString
-              // GlobalVariable* stringValue = builder.CreateGlobalStringPtr(myString);
-
-// Assign the address of the GlobalVariable to a Value* pointer
-              //Value* stringValue = stringGlobal;
-              //  Type* charType = Type::getInt8Ty(context);
-              //  Module *module = F.getParent();
-              // Constant* stringConstant = ConstantArray::get(context, functionName.c_str(), true);
-              // Create a ConstantArray that represents the string value of myString
-              //Constant* stringConstant = ConstantDataArray:&:getString(context, myString, true);
-
-              // Assign the address of the ConstantArray to a Value* pointer
-              //Value* stringValue = stringConstant;
-              // Create a global variable that references the string constant
-              // GlobalVariable* globalString = new GlobalVariable(*module, stringConstant->getType(), true, GlobalValue::PrivateLinkage, stringConstant);
-              // globalString->setName("myString");
-
-              // Use the address of the global variable as the Value* pointer
-             // Value* stringValue = globalString;
-              //Value* stringValue = new GlobalVariable(*module, stringConstant->getType(), true, GlobalValue::PrivateLinkage, stringConstant);
-              //() << "Again:" << stringValue << "\n";
-                            //
 
               Value* args[] = {LoadVal, NewValueL, Loc, valStr};
               //Value* args[] = {LoadVal,Loc,NewValueL,stringValue};
@@ -239,17 +215,7 @@ namespace {
       AU.addRequired<llvm::LoopInfoWrapperPass>();
       //AU.addRequired<llvm::ScalarEvolutionWrapperPass>();
     }
-    // unsigned int getMaxNestedLoopLevel(llvm::Loop* L) {
-    //   unsigned int maxLevel = 0;
-    //   for (llvm::Loop::iterator LI = L->begin(), LE = L->end(); LI != LE; ++LI) {
-    //       llvm::Loop* SubLoop = *LI;
-    //       unsigned int level = getMaxNestedLoopLevel(SubLoop) + 1;
-    //       if (level > maxLevel) {
-    //           maxLevel = level;
-    //       }
-    //   }
-    //   return maxLevel;
-    // }
+
   };
 }
 
