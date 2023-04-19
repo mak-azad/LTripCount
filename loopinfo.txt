@@ -1,0 +1,2 @@
+13 10 1 _ZN3Num6getNumEv
+8 2 0 _ZN3Num6getNumEv
